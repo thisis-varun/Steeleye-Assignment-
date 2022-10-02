@@ -1,0 +1,105 @@
+1) REACT LIST :-
+    Lists are used to display data in an ordered format and mainly used to display menus on websites. 
+    In React, Lists can be created in a similar way as we create lists in JavaScript.
+    Let us see how we transform Lists in regular JavaScript.
+    The map() function is used for traversing the lists. 
+    In the below example, the map() function takes an array of numbers and multiply their values with 5. 
+    We assign the new array returned by map() to the variable multiplyNums and log it.
+
+    Example : -
+        var numbers = [1, 2, 3, 4, 5];   
+        const multiplyNums = numbers.map((number)=>{   
+        return (number * 5);   
+        });   
+        console.log(multiplyNums);   
+
+
+2) PROBLEMS AND WARNINGS WITH THE CODE: 
+
+SYNTAX OF USE STATE :  
+                const [setSelectedIndex, selectedIndex] = useState();
+                syntax of useState is not correct.
+TWO RETURN STATEMENTS : 
+                In the given code we are having two return
+                statements which results in error and warnings.
+                In react there should only be a single return statement.
+UL AND LI SHOULD BE IN SAME FRAGMENT: 
+                In the given code the li and ul are in different fragments,
+                in react there should be only one single fragment in which all 
+                the elements will be wrapped.
+ALL THE DECLARATION WILL BE DONE ON THE TOP OF FILE
+
+
+
+3)FIXED AND OPTIMIZED CODE:
+
+import React, { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
+
+// Single List Item
+const WrappedSingleListItem = ({
+  index,
+  isSelected,
+  onClickHandler,
+  text,
+}) => {
+  return (
+    <li
+      style={{ backgroundColor: isSelected ? 'green' : 'red'}}
+      onClick={onClickHandler(index)}
+    >
+      {text}
+    </li>
+    <ul style={{ textAlign: 'left' }}>
+      {items.map((item, index) => (
+        <SingleListItem
+          onClickHandler={() => handleClick(index)}
+          text={item.text}
+          index={index}
+          isSelected={selectedIndex}
+        />
+      ))}
+    </ul>
+
+  );
+};
+
+WrappedSingleListItem.propTypes = {
+  index: PropTypes.number,
+  isSelected: PropTypes.bool,
+  onClickHandler: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+};
+
+const SingleListItem = memo(WrappedSingleListItem);
+
+// List Component
+const WrappedListComponent = ({
+  items,
+}) => {
+  const [setSelectedIndex, selectedIndex] = useState();
+
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [items]);
+
+  const handleClick = index => {
+    setSelectedIndex(index);
+  };
+
+
+WrappedListComponent.propTypes = {
+  items: PropTypes.array(PropTypes.shapeOf({
+    text: PropTypes.string.isRequired,
+  })),
+};
+
+WrappedListComponent.defaultProps = {
+  items: null,
+};
+const List = memo(WrappedListComponent);
+
+
+
+export default List;
+
